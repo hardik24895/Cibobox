@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "649860551955",
+    "project_id": "eisuchi-b83a2",
+    "storage_bucket": "eisuchi-b83a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649860551955:android:94b065199c0d4a72cff6e6",
+        "android_client_info": {
+          "package_name": "com.cibobox.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649860551955-ca52hkct9egant2o26nh43jvch89849j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkmHL5aV-pnbA_QD6O4XH2UKOBH8mjotM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649860551955-ca52hkct9egant2o26nh43jvch89849j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "649860551955-9945fi30535drbr3mi9stro2sq6mhdpc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cibobox.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

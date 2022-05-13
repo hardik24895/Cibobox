@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Cibobox</string>
+    <string name="please_wait">Please Wait...</string>
+    <string name="ok">OK</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_valid_email">Enter Valid Email</string>
+    <string name="enter_valid_password">Enter Passwrod Minimum 6 Charecter</string>
+    <string name="no_data_found">No Data Found!</string>
+    <string name="show_server_error">Server Connection Failed.</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="msg_logout">Do you really want to log out?</string>
+    <string name="msg_complate">Do you really want to complete this order?</string>
+</resources>
