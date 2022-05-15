@@ -11,16 +11,17 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blogspot.atifsoftwares.animatoolib.Animatoo
 import com.cibobox.app.R
+import com.cibobox.app.data.modal.OrderCompleteModal
+import com.cibobox.app.data.modal.OrderListData
+import com.cibobox.app.data.modal.OrderListModal
+import com.cibobox.app.data.modal.OrderListRequest
 import com.cibobox.app.databinding.ActivityHomeBinding
 
 import com.cibobox.app.ui.adapter.OrderListAdapter
-import com.cibobox.app.ui.adapter.TempOrderListAdapter
 import com.eisuchi.dialog.LogoutDialog
 import com.eisuchi.eisuchi.data.modal.ComplateOrderModal
 import com.eisuchi.eisuchi.data.modal.LogoutModal
-import com.eisuchi.eisuchi.data.modal.OrderDataItem
 
-import com.eisuchi.eisuchi.data.modal.OrderListModal
 import com.eisuchi.eisuchi.ui.base.BaseActivity
 import com.eisuchi.eisuchi.ui.base.BaseViewModal
 import com.eisuchi.eisuchi.uitils.Constant
@@ -36,31 +37,24 @@ import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
 @AndroidEntryPoint
-class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), TempOrderListAdapter.OnItemSelected {
+class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderListAdapter.OnItemSelected {
 
     override val  mViewModel : BaseViewModal by viewModels()
-    var adapter: TempOrderListAdapter? = null
+    var adapter: OrderListAdapter? = null
     var handler = Handler()
-    private val list: MutableList<OrderDataItem> = mutableListOf()
+    private val list: MutableList<OrderListData> = mutableListOf()
     val strList :MutableList<String> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setDummyData()
+       // setDummyData()
         setupRecyclerView()
-       // pullToRefresh()
+        pullToRefresh()
         clickEvent()
     }
 
-    fun setDummyData(){
-
-       for (i in 0 until 10){
-           strList.add("a")
-       }
 
 
-
-    }
 
 
     override fun getViewBinding(): ActivityHomeBinding = ActivityHomeBinding.inflate(layoutInflater)
@@ -81,7 +75,7 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), TempOrd
     fun setupRecyclerView() {
         val layoutManager = LinearLayoutManager(this)
         binding.include.recyclerView.layoutManager = layoutManager
-        adapter = TempOrderListAdapter(this, strList, session, "", this)
+        adapter = OrderListAdapter(this, list, session, "", this)
         binding.include.recyclerView.adapter = adapter
         binding.include.recyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -114,35 +108,17 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), TempOrd
 
 
 
-    // Auto Refresh 1 Min
-    fun autoRefresh(){
-        val timedTask: Runnable = object : Runnable {
-            override fun run() {
-                adapter?.notifyDataSetChanged()
-                handler.postDelayed(this, 60000)
-            }
-        }
-
-        handler.post(timedTask)
-    }
 
     // OrderList API calling
     fun getOrderList() {
         list.clear()
-        var result = ""
-        try {
-            val jsonBody = JSONObject()
-            jsonBody.put("sessionKey", session.user.data?.sessionKey)
 
-            result = RetrofitRequestBody.setParentJsonData(
-                Constant.ORDERS,
-                jsonBody
-            )
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
+        val request = OrderListRequest(session.user.result.get(0).userid!!.toInt())
 
-        mViewModel.order(RetrofitRequestBody.wrapParams(result)).observe(this, Observer {
+        //val jsonObject = JSONObject()
+        //jsonObject.put("userid", 173)
+
+        mViewModel.order(171).observe(this, Observer {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -166,14 +142,12 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), TempOrd
 
 
     // Order API Response
-    private fun OrderResponse(orderModal: Response<JsonElement>) {
+    private fun OrderResponse(orderModal: Response<OrderListModal>) {
         val response = orderModal.body()
         try {
-            val gson = Gson()
-            val orderModal = gson.fromJson(response.toString(), OrderListModal::class.java)
-            if (orderModal?.status == 1) {
+            if (response?.success == "1") {
                 list.clear()
-                list.addAll(orderModal.data)
+                list.addAll(response.result)
                 if (list.size>0)
                 //   binding.toolbar.txtTitle.text = list.get(0).restaurantName
                     adapter?.notifyDataSetChanged()
@@ -193,68 +167,8 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), TempOrd
     }
 
 
-    // Order API Response
-    private fun complateOrderResponse(orderModal: Response<JsonElement>) {
-        val response = orderModal.body()
-        try {
-            val gson = Gson()
-            val orderModal = gson.fromJson(response.toString(), ComplateOrderModal::class.java)
-            if (orderModal?.result == "success") {
-                // list.clear()
-                getOrderList()
-
-            } else {
-                // binding.toolbar.txtTitle.text = getString(R.string.dashboard)
-            }
-        } catch (e: Exception) {
-            errorResponse(response.toString())
-
-        }
 
 
-
-        // refreshData(getString(R.string.no_data_found), 1)
-    }
-
-    // OrderList API calling
-    fun completOrder(orderid:String) {
-        list.clear()
-        var result = ""
-        try {
-            val jsonBody = JSONObject()
-            jsonBody.put("sessionKey", session.user.data?.sessionKey)
-            jsonBody.put("user_id", session.user.data?.id)
-            jsonBody.put("order_id", orderid)
-
-            result = RetrofitRequestBody.setParentJsonData(
-                Constant.COMPLETE_ORDER,
-                jsonBody
-            )
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-
-        mViewModel.complateOrder(RetrofitRequestBody.wrapParams(result)).observe(this, Observer {
-            it?.let { resource ->
-                when (resource.status) {
-                    Status.SUCCESS -> {
-                        binding.include.swipeRefreshLayout.isRefreshing = false
-                        resource.data?.let { response -> complateOrderResponse(response) }
-                    }
-                    Status.ERROR -> {
-                        binding.include.swipeRefreshLayout.isRefreshing = false
-                        //  logOutDialog()
-                        // showAlert(it.message.toString())
-                        Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
-                    }
-                    Status.LOADING -> {
-                        binding.include.swipeRefreshLayout.isRefreshing = true
-
-                    }
-                }
-            }
-        })
-    }
 
 
     // Show Hide Place Holder
@@ -278,24 +192,25 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), TempOrd
     }
 
 
-    // Order Item Click
-    override fun onItemSelect(position: Int, data: String, action: String) {
+
+
+    override fun onItemSelect(position: Int, data: OrderListData, action: String) {
         val intent = Intent(this, OrderDetailActivity::class.java)
-        intent.putExtra(Constant.DATA, data.toString())
+        intent.putExtra(Constant.DATA, data.orderId?.toString())
+        intent.putExtra(Constant.ORDER_ID, data.id?.toInt())
+        intent.putExtra(Constant.COMPLETE_ORDER, data.status)
         startActivity(intent)
         Animatoo.animateCard(this)
     }
 
+    override fun onCompleteOrder(position: Int, data: OrderListData, action: String) {
 
 
-
-
-    override fun onCompleteOrder(position: Int, data: OrderDataItem, action: String) {
         val dialog = LogoutDialog.newInstance(
             this,
             object : LogoutDialog.onItemClick {
                 override fun onItemCLicked() {
-                    completOrder(data.id.toString())
+                    data.id?.let { orderComplete(it) }
                 }
             })
         val bundle = Bundle()
@@ -305,13 +220,48 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), TempOrd
         dialog.show(supportFragmentManager, "YesNO")
     }
 
+    // complete Order Api Calling
+    fun  orderComplete(id :Int) {
 
+
+
+
+        mViewModel.orderComplete(id).observe(this , Observer {
+            it?.let { resource ->   when (resource.status) {
+                Status.SUCCESS -> {
+                    // hideProgressbar()
+                    resource.data?.let { response -> orderCompletedResponse(response) }
+                }
+                Status.ERROR -> {
+                    // hideProgressbar()
+                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
+                }
+                Status.LOADING -> {
+                    // showProgressbar()
+                }
+            }
+            } })
+
+    }
+
+    private fun orderCompletedResponse(response: Response<OrderCompleteModal>) {
+        val data = response.body()
+
+        if (data?.success==1){
+            Toast.makeText(this, data.msg, Toast.LENGTH_LONG).show()
+            list.clear()
+            getOrderList()
+        }else{
+            errorResponse(data?.msg.toString())
+        }
+
+    }
 
 
     override fun onResume() {
         super.onResume()
         list.clear()
-        //getOrderList()
+        getOrderList()
 
     }
 
@@ -321,7 +271,7 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), TempOrd
         var result = ""
         try {
             val jsonBody = JSONObject()
-            jsonBody.put("sessionKey", session.user.data?.sessionKey)
+          //  jsonBody.put("sessionKey", session.user.data?.sessionKey)
 
             result = RetrofitRequestBody.setParentJsonData(
                 Constant.LOGOUT,

@@ -207,7 +207,7 @@ object TimeStamp {
         try {
             val f: DateFormat = SimpleDateFormat(Constant.DATE_FORMAT)
             val d: Date = f.parse(date)
-            val date: DateFormat = SimpleDateFormat("dd/MM/yyyy")
+            val date: DateFormat = SimpleDateFormat("dd MMM yyyy")
             val time: DateFormat = SimpleDateFormat("HH:mm")
             System.out.println("Date: " + date.format(d))
             System.out.println("Time: " + time.format(d))

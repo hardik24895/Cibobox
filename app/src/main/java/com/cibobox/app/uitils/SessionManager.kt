@@ -3,7 +3,8 @@ package com.eisuchi.utils
 import android.app.NotificationManager
 import android.content.Context
 import com.cibobox.app.R
-import com.eisuchi.eisuchi.data.modal.LoginModal
+import com.cibobox.app.data.modal.LoginModal
+
 
 
 import com.google.gson.Gson

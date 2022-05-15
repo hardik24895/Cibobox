@@ -17,7 +17,6 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,16 +33,15 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_17ssp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="0dp"
-                android:nestedScrollingEnabled="false"
                 android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView121" />
@@ -64,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:text="Address"
+                android:text="Customer Details"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_17ssp"
                 android:textStyle="bold"
@@ -78,24 +76,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:drawableStart="@drawable/ic_location"
+
                 android:drawablePadding="@dimen/_10sdp"
-                android:text="Deliver to"
+                android:text="Email: "
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15ssp"
                 app:layout_constraintStart_toStartOf="@+id/view"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
             <com.eisuchi.customview.TextviewSemiBold
-                android:id="@+id/textView14"
+                android:id="@+id/txtEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:text="Jhon Deo"
+                android:text="abc@gmail.com"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15ssp"
-                android:textStyle="bold"
+
                 app:layout_constraintStart_toEndOf="@+id/textView13"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -105,156 +103,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:text="1913  Peck Court, El Toro, CA, California, 92630
-Ph: 949-597-5365"
+                android:text="Phone: "
                 android:textColor="@color/black"
                 android:textSize="@dimen/_13ssp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/textView14" />
-
-            <com.eisuchi.customview.TextviewMedium
-                android:id="@+id/textView16"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Deliver in 20 Min"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_14ssp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/textView15" />
-
-            <View
-                android:id="@+id/view2"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_1sdp"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:background="@color/txt_grey"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView16" />
+                app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
             <com.eisuchi.customview.TextviewSemiBold
-                android:id="@+id/textView17"
+                android:id="@+id/txtPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:text="Price Detail"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_17ssp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/view2"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
-
-            <com.eisuchi.customview.TextviewMedium
-                android:id="@+id/txtTempMrp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:text="Total MRP"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15ssp"
-                app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/textView17" />
-
-
-            <com.eisuchi.customview.TextviewMedium
-                android:id="@+id/txtMrp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:text="$112"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15ssp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView17" />
-
-            <com.eisuchi.customview.TextviewMedium
-                android:id="@+id/txtTempDiscount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:text="Total Discount"
+                android:text="abc@gmail.com"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15ssp"
-                app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/txtMrp" />
+                android:layout_marginStart="@dimen/_5sdp"
+                app:layout_constraintStart_toEndOf="@+id/textView13"
+                app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
-            <com.eisuchi.customview.TextviewMedium
-                android:id="@+id/txtDescount"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="$112"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15ssp"
-                app:layout_constraintEnd_toEndOf="@+id/txtMrp"
-                app:layout_constraintTop_toBottomOf="@+id/txtTempMrp" />
-
-
-            <com.eisuchi.customview.TextviewMedium
-                android:id="@+id/txtTempTax"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Tax"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15ssp"
-                app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/txtDescount" />
-
-            <com.eisuchi.customview.TextviewMedium
-                android:id="@+id/txtTax"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="$2"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15ssp"
-                app:layout_constraintEnd_toEndOf="@+id/txtMrp"
-                app:layout_constraintTop_toBottomOf="@+id/txtDescount" />
-
-
-            <com.eisuchi.customview.TextviewMedium
-                android:id="@+id/txtTempShipping"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Shipping Price"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15ssp"
-                app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/txtTempTax" />
-
-            <com.eisuchi.customview.TextviewMedium
-                android:id="@+id/txtTaxShipping"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="$0"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_15ssp"
-                app:layout_constraintEnd_toEndOf="@+id/txtMrp"
-                app:layout_constraintTop_toBottomOf="@+id/txtTempTax" />
 
             <View
                 android:id="@+id/view3"
                 android:layout_width="0dp"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="@color/txt_grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtTaxShipping" />
+                app:layout_constraintTop_toBottomOf="@+id/txtPhone" />
 
             <com.eisuchi.customview.TextviewSemiBold
                 android:id="@+id/txtTempTotal"
@@ -266,7 +142,7 @@ Ph: 949-597-5365"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_17ssp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/view2"
+                app:layout_constraintStart_toStartOf="@+id/view3"
                 app:layout_constraintTop_toBottomOf="@+id/view3" />
 
             <com.eisuchi.customview.TextviewBold
@@ -274,16 +150,17 @@ Ph: 949-597-5365"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
                 android:text="$0"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/txtMrp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view3" />
 
 
             <com.eisuchi.customview.ButtonReguler
-                android:id="@+id/btnLogin"
+                android:id="@+id/btnCompleteOrder"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -292,9 +169,9 @@ Ph: 949-597-5365"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:background="@drawable/custom_button_press_red_bg"
                 android:text="Order Completed"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:textAllCaps="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

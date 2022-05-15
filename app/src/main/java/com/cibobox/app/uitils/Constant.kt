@@ -9,7 +9,7 @@ object Constant {
 
    // private const val BASE_URL = "http://seorank.us/testing/eisuchi/site/"
    // private const val BASE_URL = "http://www.eisuchi.com/"
-    private const val BASE_URL = "https://menu.eisuchi.com/"
+    const val BASE_URL = "https://cibobox.com/"
     const val API_URL = "${BASE_URL}api/"
 
     const val TITLE = "title"

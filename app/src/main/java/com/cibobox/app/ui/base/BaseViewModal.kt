@@ -2,18 +2,23 @@ package com.eisuchi.eisuchi.ui.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import com.cibobox.app.data.modal.LoginRequest
+import com.cibobox.app.data.modal.OrderListRequest
 import com.eisuchi.eisuchi.data.repository.MainRepository
 import com.eisuchi.eisuchi.uitils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import okhttp3.RequestBody
 import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.Path
+import retrofit2.http.Query
 import javax.inject.Inject
 
 @HiltViewModel
 class BaseViewModal  @Inject constructor(private val mainRepository: MainRepository) : ViewModel(){
 
-    fun login(@Body body: RequestBody) = liveData(Dispatchers.IO) {
+    fun login(@Body body: LoginRequest) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
             emit(Resource.success(data = mainRepository.login(body)))
@@ -22,23 +27,6 @@ class BaseViewModal  @Inject constructor(private val mainRepository: MainReposit
         }
     }
 
-    fun complateOrder(@Body body: RequestBody) = liveData(Dispatchers.IO) {
-        emit(Resource.loading(data = null))
-        try {
-            emit(Resource.success(data = mainRepository.complateOrder(body)))
-        } catch (exception: Exception) {
-            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
-        }
-    }
-
-    fun deliverAll(@Body body: RequestBody) = liveData(Dispatchers.IO) {
-        emit(Resource.loading(data = null))
-        try {
-            emit(Resource.success(data = mainRepository.oder(body)))
-        } catch (exception: Exception) {
-            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
-        }
-    }
 
     fun logout(@Body body: RequestBody) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
@@ -49,29 +37,18 @@ class BaseViewModal  @Inject constructor(private val mainRepository: MainReposit
         }
     }
 
-    fun order(@Body body: RequestBody) = liveData(Dispatchers.IO) {
+    fun order(@Field("userid")  id:Int) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = mainRepository.oder(body)))
+            emit(Resource.success(data = mainRepository.oder(id)))
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
     }
-
-    fun getBookingStatus(@Body body: RequestBody) = liveData(Dispatchers.IO) {
+ fun orderComplete(@Field("order_id")  id:Int) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = mainRepository.getBookingStatus(body)))
-        } catch (exception: Exception) {
-            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
-        }
-    }
-
-
-    fun orderDetail(@Body body: RequestBody) = liveData(Dispatchers.IO) {
-        emit(Resource.loading(data = null))
-        try {
-            emit(Resource.success(data = mainRepository.oderDetail(body)))
+            emit(Resource.success(data = mainRepository.orderComplete(id)))
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
@@ -79,23 +56,18 @@ class BaseViewModal  @Inject constructor(private val mainRepository: MainReposit
 
 
 
-    fun setDelivery(@Body body: RequestBody) = liveData(Dispatchers.IO) {
+
+    fun orderDetail(@Path("order_id") id :String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = mainRepository.setDeliver(body)))
+            emit(Resource.success(data = mainRepository.oderDetail(id)))
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }
     }
 
 
-    fun print(@Body body: RequestBody) = liveData(Dispatchers.IO) {
-        emit(Resource.loading(data = null))
-        try {
-            emit(Resource.success(data = mainRepository.getPrintSlip(body)))
-        } catch (exception: Exception) {
-            emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
-        }
-    }
+
+
 
 }

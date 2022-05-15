@@ -6,11 +6,15 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.cibobox.app.R
+import com.cibobox.app.data.modal.OrderIteams
+import com.cibobox.app.data.modal.OrderListData
 import com.cibobox.app.databinding.RowOrderIteamListBinding
 import com.cibobox.app.databinding.RowOrderListBinding
 
-import com.eisuchi.eisuchi.data.modal.OrderDataItem
-import com.eisuchi.eisuchi.data.modal.OrderItems
+
+
 import com.eisuchi.eisuchi.uitils.Constant
 import com.eisuchi.eisuchi.uitils.TimeStamp
 import com.eisuchi.extention.invisible
@@ -22,7 +26,7 @@ import java.util.concurrent.TimeUnit
 
 class OrderDetailIteamAdapter(
     private val mContext: Context,
-    var list: MutableList<OrderItems> = mutableListOf(),
+    var list: MutableList<OrderIteams> = mutableListOf(),
     var session: SessionManager,
     var status: String,
     private val listener: OnItemSelected,
@@ -51,8 +55,7 @@ class OrderDetailIteamAdapter(
     }
 
     interface OnItemSelected {
-        fun onItemSelect(position: Int, data: OrderDataItem, action: String)
-        fun onCompleteOrder(position: Int, data: OrderDataItem, action: String)
+        fun onItemSelect(position: Int, data: OrderListData, action: String)
     }
 
     class ItemHolder(containerView: RowOrderIteamListBinding) : RecyclerView.ViewHolder(containerView.root) {
@@ -60,11 +63,14 @@ class OrderDetailIteamAdapter(
 
         fun bindData(
             context: Context,
-            data: OrderItems,
+            data: OrderIteams,
             listener: OnItemSelected, session: SessionManager
         ) {
 
-
+            binding.texPrice.text = "$" + data.price
+            binding.txtProductName.text = data.name
+            Glide.with(context).load(data.image).placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder).into(binding.img)
            // binding.txtMin.text = elapseTime
             //binding.btnComplate.setOnClickListener { listener.onCompleteOrder(adapterPosition, data, "MainView") }
 

@@ -11,10 +11,11 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.cibobox.app.R
+import com.cibobox.app.data.modal.LoginModal
+import com.cibobox.app.data.modal.LoginRequest
 import com.cibobox.app.databinding.ActivityLoginBinding
 import com.eisuchi.extention.*
 
-import com.eisuchi.eisuchi.data.modal.LoginModal
 
 import com.eisuchi.eisuchi.ui.base.BaseActivity
 import com.eisuchi.eisuchi.ui.base.BaseViewModal
@@ -51,8 +52,8 @@ class LoginActivity : BaseActivity<BaseViewModal, ActivityLoginBinding>() {
     // view click handle
     fun clickEvent(){
         binding.btnLogin.setOnClickListener {
-            goToActivityAndClearTask<HomeActivity>()
-           // validation()
+           // goToActivityAndClearTask<HomeActivity>()
+            validation()
         }
 
         binding.edtPassword.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
@@ -81,10 +82,9 @@ class LoginActivity : BaseActivity<BaseViewModal, ActivityLoginBinding>() {
             }
 
             else -> {
-              //  login("sdfgsdgdfgdxf")
+                //login("sdfgsdgdfgdxf")
 
 
-/*
                 FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                     if (!task.isSuccessful) {
                         Log.w("", "Fetching FCM registration token failed", task.exception)
@@ -99,7 +99,7 @@ class LoginActivity : BaseActivity<BaseViewModal, ActivityLoginBinding>() {
                     // val msg = getString(R.string.msg_token_fmt, token)
                     Log.d("token", token.toString())
                     //  Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                })*/
+                })
 
             }
 
@@ -112,23 +112,11 @@ class LoginActivity : BaseActivity<BaseViewModal, ActivityLoginBinding>() {
     // call login API
     private fun login(token:String) {
 
-        var result = ""
-        try {
-            val jsonBody = JSONObject()
-            jsonBody.put("email", binding.edtEmail.getValue())
-            jsonBody.put("password", binding.edtPassword.getValue())
-            jsonBody.put("deviceToken", token)
-            jsonBody.put("deviceType", 0)
 
-            result = RetrofitRequestBody.setParentJsonData(
-                Constant.LOGIN,
-                jsonBody
-            )
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
+         val request = LoginRequest(binding.edtEmail.getValue() , binding.edtPassword.getValue(),token, device_type = "Android")
 
-        mViewModel.login(RetrofitRequestBody.wrapParams(result)).observe(this, Observer {
+
+        mViewModel.login(request).observe(this, Observer {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
@@ -149,13 +137,13 @@ class LoginActivity : BaseActivity<BaseViewModal, ActivityLoginBinding>() {
 
     fun handleResponse(loginModal : Response<LoginModal>){
         val response =loginModal.body()
-        if (response?.status == 1) {
+        if (response?.success == "1") {
             session.user = response
             session.storeDataByKey(Constant.IS_SOUND, true)
-            Logger.d("Session Key=== ${response.data?.sessionKey}" )
+            Logger.d("User ID=== ${response.result?.get(0).userid}" )
             goToActivityAndClearTask<HomeActivity>()
         } else {
-            showAlert(response?.data?.msg.toString())
+            showAlert(response?.msg.toString())
         }
     }
 
