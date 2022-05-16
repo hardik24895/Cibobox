@@ -29,7 +29,10 @@ data class Result(
 	val items: MutableList<OrderIteams> = mutableListOf(),
 
 	@field:SerializedName("email")
-	val email: String? = null
+	val email: String? = null,
+
+	@field:SerializedName("first_name")
+	val name: String? = null
 )
 
 data class OrderIteams(
@@ -39,6 +42,12 @@ data class OrderIteams(
 
 	@field:SerializedName("price")
 	val price: String? = null,
+
+	@field:SerializedName("special_detail")
+	val instra: String? = null,
+
+	@field:SerializedName("qty")
+	val qty: String? = null,
 
 	@field:SerializedName("name")
 	val name: String? = null

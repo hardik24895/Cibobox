@@ -18,6 +18,7 @@ import com.cibobox.app.data.modal.OrderListRequest
 import com.cibobox.app.databinding.ActivityHomeBinding
 
 import com.cibobox.app.ui.adapter.OrderListAdapter
+import com.commonProject.interfaces.LoadMoreListener
 import com.eisuchi.dialog.LogoutDialog
 import com.eisuchi.eisuchi.data.modal.ComplateOrderModal
 import com.eisuchi.eisuchi.data.modal.LogoutModal
@@ -41,9 +42,10 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
 
     override val  mViewModel : BaseViewModal by viewModels()
     var adapter: OrderListAdapter? = null
-    var handler = Handler()
     private val list: MutableList<OrderListData> = mutableListOf()
-    val strList :MutableList<String> = mutableListOf()
+
+    var page: Int = 0
+    var hasNextPage: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -51,6 +53,8 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
         setupRecyclerView()
         pullToRefresh()
         clickEvent()
+
+
     }
 
 
@@ -65,9 +69,12 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
     fun pullToRefresh() {
         binding.include.swipeRefreshLayout.setOnRefreshListener {
             // list.clear()
-            adapter?.notifyDataSetChanged()
             list.clear()
-            getOrderList()
+            hasNextPage = true
+            binding.include.recyclerView?.isLoading = true
+
+             page=0
+            getOrderList(page)
         }
     }
 
@@ -83,6 +90,16 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
                 LinearLayoutManager.VERTICAL
             )
         )
+
+        binding.include.recyclerView.setLoadMoreListener(object : LoadMoreListener {
+            override fun onLoadMore() {
+                if (hasNextPage && !binding.include.recyclerView.isLoading) {
+                    binding.include.progressbar.visible()
+                    getOrderList(++page)
+                }
+            }
+        })
+
     }
 
     // View Click Handle
@@ -110,29 +127,29 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
 
 
     // OrderList API calling
-    fun getOrderList() {
-        list.clear()
+    fun getOrderList(pageno :Int) {
 
-        val request = OrderListRequest(session.user.result.get(0).userid!!.toInt())
+
+     //   val request = OrderListRequest(session.user.result.get(0).userid!!.toInt())
 
         //val jsonObject = JSONObject()
         //jsonObject.put("userid", 173)
 
-        mViewModel.order(171).observe(this, Observer {
+        mViewModel.order(session.user.result.get(0).userid!!.toInt(), pageno).observe(this, Observer {
             it?.let { resource ->
                 when (resource.status) {
                     Status.SUCCESS -> {
-                        binding.include.swipeRefreshLayout.isRefreshing = false
+                       // binding.include.swipeRefreshLayout.isRefreshing = false
                         resource.data?.let { response -> OrderResponse(response) }
                     }
                     Status.ERROR -> {
-                        binding.include.swipeRefreshLayout.isRefreshing = false
+                      //  binding.include.swipeRefreshLayout.isRefreshing = false
                         //  logOutDialog()
                         // showAlert(it.message.toString())
                         Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                     }
                     Status.LOADING -> {
-                        binding.include.swipeRefreshLayout.isRefreshing = true
+                      //  binding.include.swipeRefreshLayout.isRefreshing = true
 
                     }
                 }
@@ -144,13 +161,23 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
     // Order API Response
     private fun OrderResponse(orderModal: Response<OrderListModal>) {
         val response = orderModal.body()
+        binding.include.swipeRefreshLayout.isRefreshing = false
         try {
             if (response?.success == "1") {
-                list.clear()
                 list.addAll(response.result)
-                if (list.size>0)
-                //   binding.toolbar.txtTitle.text = list.get(0).restaurantName
-                    adapter?.notifyDataSetChanged()
+                if (list.size>0){
+                    binding.include.progressbar.hide()
+                }
+                 //   adapter?.notifyDataSetChanged()
+
+
+                response.result?.let { list.size.minus(it?.size) }?.let {
+                    adapter?.notifyItemRangeInserted(
+                        it,
+                        list.size
+                    )
+                }
+                hasNextPage = list.size < response.total!!
 
 
             } else {
@@ -250,7 +277,7 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
         if (data?.success==1){
             Toast.makeText(this, data.msg, Toast.LENGTH_LONG).show()
             list.clear()
-            getOrderList()
+            getOrderList(page)
         }else{
             errorResponse(data?.msg.toString())
         }
@@ -261,7 +288,9 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
     override fun onResume() {
         super.onResume()
         list.clear()
-        getOrderList()
+        binding.include.swipeRefreshLayout.isRefreshing = true
+        page=0
+        getOrderList(page)
 
     }
 

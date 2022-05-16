@@ -37,10 +37,10 @@ class BaseViewModal  @Inject constructor(private val mainRepository: MainReposit
         }
     }
 
-    fun order(@Field("userid")  id:Int) = liveData(Dispatchers.IO) {
+    fun order(@Field("userid")  id:Int, @Field("pageno")  pageno:Int) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = mainRepository.oder(id)))
+            emit(Resource.success(data = mainRepository.oder(id,pageno)))
         } catch (exception: Exception) {
             emit(Resource.error(data = null, message = exception.message ?: "Error Occurred!"))
         }

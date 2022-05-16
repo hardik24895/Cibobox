@@ -69,6 +69,8 @@ class OrderDetailIteamAdapter(
 
             binding.texPrice.text = "$" + data.price
             binding.txtProductName.text = data.name
+            binding.txtQty.text = "Qty: " +data.qty
+            binding.txtInstra.text = data.instra
             Glide.with(context).load(data.image).placeholder(R.drawable.placeholder)
                 .error(R.drawable.placeholder).into(binding.img)
            // binding.txtMin.text = elapseTime

@@ -31,7 +31,7 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="Items"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_17ssp"
+                android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/view"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -64,10 +64,37 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="Customer Details"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_17ssp"
+                android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/view"
                 app:layout_constraintTop_toBottomOf="@+id/view" />
+
+            <com.eisuchi.customview.TextviewMedium
+                android:id="@+id/txtTempName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+
+                android:drawablePadding="@dimen/_10sdp"
+                android:text="Name: "
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp"
+                app:layout_constraintStart_toStartOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+            <com.eisuchi.customview.TextviewSemiBold
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="Hardik Kanzariya"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp"
+
+                app:layout_constraintStart_toEndOf="@+id/textView13"
+                app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
 
             <com.eisuchi.customview.TextviewMedium
@@ -75,27 +102,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_5sdp"
 
                 android:drawablePadding="@dimen/_10sdp"
                 android:text="Email: "
                 android:textColor="@color/black"
-                android:textSize="@dimen/_15ssp"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintStart_toStartOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+                app:layout_constraintTop_toBottomOf="@+id/txtTempName" />
 
             <com.eisuchi.customview.TextviewSemiBold
                 android:id="@+id/txtEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:text="abc@gmail.com"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_15ssp"
+                android:textSize="@dimen/_12ssp"
 
                 app:layout_constraintStart_toEndOf="@+id/textView13"
-                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+                app:layout_constraintTop_toBottomOf="@+id/txtTempName" />
 
             <com.eisuchi.customview.TextviewMedium
                 android:id="@+id/textView15"
@@ -105,7 +132,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:text="Phone: "
                 android:textColor="@color/black"
-                android:textSize="@dimen/_13ssp"
+                android:textSize="@dimen/_12ssp"
                 app:layout_constraintStart_toStartOf="@+id/view"
                 app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
@@ -116,7 +143,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:text="abc@gmail.com"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_15ssp"
+                android:textSize="@dimen/_12ssp"
                 android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintStart_toEndOf="@+id/textView13"
                 app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
@@ -140,7 +167,7 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="Payable Amount"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_17ssp"
+                android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/view3"
                 app:layout_constraintTop_toBottomOf="@+id/view3" />

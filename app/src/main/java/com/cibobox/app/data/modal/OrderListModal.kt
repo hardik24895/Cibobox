@@ -7,6 +7,8 @@ data class OrderListModal(
 
 	@field:SerializedName("msg")
 	val msg: String? = null,
+@field:SerializedName("total")
+	val total: Int? = null,
 
 	@field:SerializedName("result")
 	val result: MutableList<OrderListData> = mutableListOf(),

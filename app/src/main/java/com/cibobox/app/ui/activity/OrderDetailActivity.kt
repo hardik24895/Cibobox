@@ -130,6 +130,7 @@ class OrderDetailActivity :BaseActivity<BaseViewModal, ActivityOrderDetailBindin
             data?.items.let { it?.let { it1 -> list.addAll(it1) } }
             adapter?.notifyDataSetChanged()
 
+            binding.txtName.text = data?.name
             binding.txtEmail.text = data?.email
             binding.txtPhone.text = data?.mobileNo
             binding.txtTotal.text ="$"+ data?.totalprice

@@ -15,7 +15,7 @@ import javax.inject.Singleton
 class MainRepository @Inject constructor (private val apiHelper: ApiHelper) {
     suspend fun  login(@Body body: LoginRequest) = apiHelper.login(body)
     suspend fun  logout(@Body body: RequestBody) = apiHelper.logout(body)
-    suspend fun  oder(@Field("userid")  id:Int) = apiHelper.order(id)
+    suspend fun  oder(@Field("userid")  id:Int, @Field("pageno")  pageno:Int) = apiHelper.order(id, pageno)
     suspend fun  oderDetail(@Path("order_id") id :String) = apiHelper.orderDetail(id)
     suspend fun  orderComplete(@Field("order_id")  id:Int) = apiHelper.orderComplete(id)
 }
