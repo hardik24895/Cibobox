@@ -80,10 +80,10 @@ class OrderListAdapter(
                 binding.mainView.setBackgroundColor(Color.parseColor("#80E03744"))
             }
 
-          val amount=String.format("$ %.2f", data.totalAmount?.toDouble())
+         // val amount=String.format("$ %.2f", data.totalAmount?.toDouble())
 
            binding.txtOrderNo.text ="#" + data.orderId
-            binding.txtAmount .text =  amount
+            binding.txtAmount .text =  data.totalAmount
             binding.txtDate.text = TimeStamp.getServerDate(data.createdAt.toString())
            // binding.txtMin.text = elapseTime
             binding.btnCompleOrder.setOnClickListener { listener.onCompleteOrder(adapterPosition, data, "MainView") }

@@ -23,6 +23,17 @@
             app:srcCompat="@drawable/test_logo"
            />
 
+        <ImageView
+            android:id="@+id/imgSound"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            android:padding="@dimen/_4sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/imgBack"
+            app:layout_constraintEnd_toEndOf="@+id/txtTitle"
+            app:layout_constraintTop_toTopOf="@+id/imgBack"
+            app:srcCompat="@drawable/sound_on" />
 
 
         <com.eisuchi.customview.TextviewMedium

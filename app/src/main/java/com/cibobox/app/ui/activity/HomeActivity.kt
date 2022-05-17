@@ -1,10 +1,15 @@
 package com.cibobox.app.ui.activity
 
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.app.NotificationManagerCompat
 
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -20,6 +25,7 @@ import com.cibobox.app.databinding.ActivityHomeBinding
 import com.cibobox.app.ui.adapter.OrderListAdapter
 import com.commonProject.interfaces.LoadMoreListener
 import com.eisuchi.dialog.LogoutDialog
+import com.eisuchi.dialog.NotificationPermissionDialog
 import com.eisuchi.eisuchi.data.modal.ComplateOrderModal
 import com.eisuchi.eisuchi.data.modal.LogoutModal
 
@@ -53,8 +59,12 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
         setupRecyclerView()
         pullToRefresh()
         clickEvent()
-
-
+        handleNotificationClick(intent)
+        binding.include2.imgSound.visible()
+        if (session.getDataByKeyBoolean(Constant.IS_SOUND, true))
+            binding.include2.imgSound.setImageResource(R.drawable.sound_on)
+        else
+            binding.include2.imgSound.setImageResource(R.drawable.sound_off)
     }
 
 
@@ -104,6 +114,16 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
 
     // View Click Handle
     fun clickEvent() {
+
+        binding.include2.imgSound.setOnClickListener {
+            if (session.getDataByKeyBoolean(Constant.IS_SOUND, true)){
+                binding.include2.imgSound.setImageResource(R.drawable.sound_off)
+                session.storeDataByKey(Constant.IS_SOUND, false)
+            }else{
+                binding.include2.imgSound.setImageResource(R.drawable.sound_on)
+                session.storeDataByKey(Constant.IS_SOUND, true)
+            }
+        }
        binding.include2.txtLogout.setOnClickListener {
            val dialog = LogoutDialog.newInstance(
                this,
@@ -292,6 +312,10 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
         page=0
         getOrderList(page)
 
+        if(!isNotificationListenerEnabled(this)){
+            permissonDialog(this)
+        }
+
     }
 
     // Logout API Calling
@@ -340,6 +364,63 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
         }
 
     }
+    fun handleNotificationClick(intent: Intent?){
+        val extras = intent?.extras
+        if (extras != null) {
+            val bundle = intent.getBundleExtra(Constant.DATA)
+
+           // val type = bundle?.getString(Constant.ORDER)
+            val orderID = bundle?.getString(Constant.ORDER_ID)
+
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val intent = Intent(this, OrderDetailActivity::class.java)
+                    intent.putExtra(Constant.DATA, orderID)
+                    startActivity(intent)
+                    Animatoo.animateCard(this)
+                }, 1000)
+
+
+        }
+    }
+
+    fun isNotificationListenerEnabled(context: Context): Boolean {
+        val packageNames = NotificationManagerCompat.getEnabledListenerPackages(this)
+        return packageNames.contains(context.getPackageName())
+    }
+
+    // LogOut Dialog Show
+    fun permissonDialog(context: Context){
+
+        val dialog = NotificationPermissionDialog.newInstance(
+            context,
+            object : NotificationPermissionDialog.onItemClick {
+                override fun onItemCLicked() {
+                    openNotificationListenSettings()
+                }
+            })
+        val bundle = Bundle()
+        bundle.putString(Constant.TITLE, getString(R.string.app_name))
+        bundle.putString(Constant.TEXT, "Allow access to notifications in Settings manually, otherwise some features may not work properly")
+        bundle.putBoolean(Constant.INFO, true)
+        dialog.arguments = bundle
+        dialog.show(supportFragmentManager, "YesNO")
+    }
+
+    fun openNotificationListenSettings() {
+        try {
+            val intent: Intent
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+            } else {
+                intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+            }
+            startActivity(intent)
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+
 }
 
 

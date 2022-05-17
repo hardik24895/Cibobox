@@ -38,29 +38,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService(){
         private const val TAG = "Notification"
     }
 
-  /*  protected fun isActivityRunning(activityClass: Class<*>): Boolean? {
-        val activityManager = baseContext.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-        val tasks = activityManager.getRunningTasks(Int.MAX_VALUE)
-        for (task in tasks) {
-            if (activityClass.canonicalName.equals(
-                    task.baseActivity!!.className,
-                    ignoreCase = true
-                )
-            ) return true
-        }
-        return false
-    }*/
     override fun onCreate() {
         super.onCreate()
         session = SessionManager(context = applicationContext)
 
-     // val thread = Thread(runnable)
-    //  thread.start()
         val mReceiver : BroadcastReceiver = object :BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
               //  loadHtml()
                 if (intent?.action =="OPEN_NEW_ACTIVITY")
-                {     if (session.getDataByKeyBoolean("isActive",true)){
+                {
+                    if (session.getDataByKeyBoolean("isActive",true)){
                     val i = Intent(applicationContext, HomeActivity::class.java)
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                     startActivity(i)
@@ -76,9 +63,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(){
 
             }
         }
-
-
-
 
        val mIntentFilter= IntentFilter("OPEN_NEW_ACTIVITY" )
         registerReceiver(mReceiver, mIntentFilter);
@@ -147,24 +131,26 @@ class MyFirebaseMessagingService : FirebaseMessagingService(){
             //  val click_action = data["click_action"]
 
 
-            val order = data.get("order")
+           val  orderId = data["order_id"]
+
+           /* val order = data.get("order")
 
 
             val gson = Gson()
             val jsonElement = gson.toJsonTree(data)
             val modal: NotificationModal2 =
-                gson.fromJson(jsonElement, NotificationModal2::class.java)
+                gson.fromJson(jsonElement, NotificationModal2::class.java)*/
 
 
 
 
             try {
-                val obj = JSONObject(order)
+              /*  val obj = JSONObject(order)
                 Log.d("My App", obj.toString())
 
                 val orderId = obj.getString("order_id")
                 bundle.putString(Constant.ORDER, modal.ops.toString())
-                bundle.putString(Constant.ORDER_ID, orderId)
+                bundle.putString(Constant.ORDER_ID, orderId)*/
 
 
                     val  broadcast =  Intent();
@@ -189,7 +175,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(){
                 }*/
 
             } catch (t: Throwable) {
-                Log.e("My App", "Could not parse malformed JSON: \"" + order.toString() + "\"")
+               // Log.e("My App", "Could not parse malformed JSON: \"" + order.toString() + "\"")
             }
 
 
@@ -199,7 +185,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(){
 
 
             if (title != null) bundle.putString(Constant.TITLE, title)
-            bundle.putString(Constant.ACTION, clickAction)
             intent.putExtra(Constant.DATA, bundle)
         } else {
             val bundle = Bundle()
@@ -225,7 +210,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService(){
        // val sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
        // val soundUri =
          //   Uri.parse("android.resource://" + packageName + "/" + R.raw.waterdrop_drop)
-        val channelId = "Defaultsss"
+        val channelId = "DefualtCibo"
         val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setAutoCancel(true)
@@ -365,17 +350,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService(){
 
         super.onDestroy()
     }
-    fun sayText(context: Context?, message: String?) {
-        mTextToSpeech = TextToSpeech(context) { status ->
-            try {
-                if (status == TextToSpeech.SUCCESS) {
-                    mTextToSpeech.setLanguage(Locale.US)
-                    mTextToSpeech.speak(message, TextToSpeech.QUEUE_ADD, null)
-                }
-            } catch (ex: Exception) {
-                print("Error handling TextToSpeech GCM notification " + ex.message)
-            }
-        }
-    }
+
 
 }
