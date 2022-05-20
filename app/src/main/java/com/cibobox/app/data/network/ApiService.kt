@@ -21,7 +21,7 @@ interface ApiService {
     // OrderList
     @FormUrlEncoded
     @POST("my_order_api")
-    suspend fun order(@Field("userid")  userName:Int, @Field("pageno")  pageno:Int): Response<OrderListModal>
+    suspend fun order(@Field("userid")  userName:Int, @Field("pageno")  pageno:Int,@Field("type")  type:Int): Response<OrderListModal>
 
     // Order Detail
     @GET("orderdetail_api/{order_id}")

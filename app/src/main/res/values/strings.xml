@@ -12,4 +12,6 @@
     <string name="msg_logout">Do you really want to log out?</string>
     <string name="msg_complate">Do you really want to complete this order?</string>
     <string name="default_notification_channel_id">DefualtCibo</string>
+    <string name="title_pending">Pending</string>
+    <string name="title_completed">Complete</string>
 </resources>

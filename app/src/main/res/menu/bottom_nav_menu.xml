@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_pending_order"
+        android:title="@string/title_pending" />
+    <item
+        android:id="@+id/navigation_bookings"
+        android:icon="@drawable/ic_completed_order"
+        android:title="@string/title_completed" />
+
+
+
+</menu>

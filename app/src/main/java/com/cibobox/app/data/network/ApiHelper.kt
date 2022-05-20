@@ -12,7 +12,7 @@ import javax.inject.Inject
 class ApiHelper @Inject constructor (private val apiService: ApiService) {
     suspend fun  login(@Body body: LoginRequest) = apiService.login(body)
     suspend fun  logout(@Body body: RequestBody) = apiService.logout(body)
-    suspend fun  order(@Field("userid")  id:Int, @Field("pageno")  pageno:Int) = apiService.order(id,pageno)
+    suspend fun  order(@Field("userid")  id:Int, @Field("pageno")  pageno:Int,@Field("type")  type:Int) = apiService.order(id,pageno,type)
     suspend fun  orderComplete(@Field("order_id")  id:Int) = apiService.orderComplete(id)
     suspend fun  orderDetail(@Path("order_id") id :String) = apiService.orderDetail(id)
 
