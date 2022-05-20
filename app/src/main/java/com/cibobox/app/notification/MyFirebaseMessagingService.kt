@@ -1,10 +1,13 @@
 package com.eisuchi.eisuchi.notification
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.*
 import android.media.AudioAttributes
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -12,6 +15,7 @@ import android.util.Log
 import android.webkit.WebView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
+import androidx.core.content.ContextCompat
 import com.cibobox.app.R
 import com.cibobox.app.ui.activity.HomeActivity
 import com.cibobox.app.ui.activity.OrderDetailActivity
@@ -205,39 +209,82 @@ class MyFirebaseMessagingService : FirebaseMessagingService(){
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_CANCEL_CURRENT
             )
         }
+        val mSound: Uri = Uri.parse(
+            ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.waterdrop_drop
+        )
+
+        if (Build.MANUFACTURER == "Xiaomi")
+            RingtoneManager.getRingtone(this, mSound).play()
+
        // val sound =
            // Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + R.raw.waterdrop_drop) //Here is FILE_NAME is the name of file that you want to play
        // val sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
        // val soundUri =
          //   Uri.parse("android.resource://" + packageName + "/" + R.raw.waterdrop_drop)
         val channelId = "DefualtCibo"
-        val builder = NotificationCompat.Builder(this, channelId)
+
+        val notificationBuilder: NotificationCompat.Builder =
+            NotificationCompat.Builder(this, channelId)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setContentIntent(pendingIntent)
+                .setVibrate(longArrayOf(100, 500))
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setColor(ContextCompat.getColor(this, R.color.black))
+                .setStyle(
+                    NotificationCompat.BigTextStyle()
+                        .bigText(message).setBigContentTitle(title)
+                )
+                //.setDefaults(Notification.DEFAULT_SOUND)
+                .setSound(mSound)
+
+      /*  val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setAutoCancel(true)
             .setContentTitle(title)
             .setContentText(message)
             .setContentIntent(pendingIntent)
             .setStyle(NotificationCompat.BigTextStyle().bigText(message))
-           // .setSound(soundUri)
+           // .setSound(soundUri)*/
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
+            // Since android Oreo notification channel is needed.
             val attributes = AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                 .build()
 
-            val channel = NotificationChannel(
+            val mChannel = NotificationChannel(
                 channelId,
                 "Default channel",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
-           // channel.setSound(soundUri, attributes)
-            manager.createNotificationChannel(channel)
+
+
+            // Configure the notification channel.
+            mChannel.enableLights(true)
+            mChannel.enableVibration(true)
+            mChannel.setShowBadge(true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                mChannel.setAllowBubbles(true)
+            }
+            mChannel.setBypassDnd(true)
+
+            mChannel.vibrationPattern = longArrayOf(100, 500)
+            mChannel.importance = NotificationManager.IMPORTANCE_HIGH
+            mChannel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+            mChannel.setSound(mSound, attributes)
+            manager.createNotificationChannel(mChannel)
         }
         //val mp: MediaPlayer = MediaPlayer.create(applicationContext, R.raw.waterdrop_drop)
        // mp.start()
 
-        manager.notify(System.currentTimeMillis().toInt(), builder.build())
+        manager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
 
        // sayText(applicationContext, message)
     }

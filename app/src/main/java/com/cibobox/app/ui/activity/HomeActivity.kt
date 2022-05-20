@@ -129,7 +129,9 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
                this,
                object : LogoutDialog.onItemClick {
                    override fun onItemCLicked() {
-                       logOut()
+                       //logOut()
+                       session.clearSession()
+                       goToActivityAndClearTask<LoginActivity>()
                    }
                })
            val bundle = Bundle()
@@ -270,9 +272,6 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
     // complete Order Api Calling
     fun  orderComplete(id :Int) {
 
-
-
-
         mViewModel.orderComplete(id).observe(this , Observer {
             it?.let { resource ->   when (resource.status) {
                 Status.SUCCESS -> {
@@ -297,6 +296,7 @@ class HomeActivity : BaseActivity<BaseViewModal, ActivityHomeBinding>(), OrderLi
         if (data?.success==1){
             Toast.makeText(this, data.msg, Toast.LENGTH_LONG).show()
             list.clear()
+            page=0
             getOrderList(page)
         }else{
             errorResponse(data?.msg.toString())
